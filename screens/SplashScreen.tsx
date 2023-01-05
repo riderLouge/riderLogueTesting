@@ -7,7 +7,7 @@ const SplashScreen = ({ navigation }) => {
 
   setTimeout(function () {
     setTimePassed(true);
-  }, 5000);
+  }, 2000);
 
   if (!timePassed) {
     return (
