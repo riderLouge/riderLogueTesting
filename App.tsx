@@ -19,10 +19,13 @@ import ProfileScreen from './screens/ProfileScreen';
 import SplashScreen from 'react-native-splash-screen';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useColorScheme } from 'react-native';
+import {enableLatestRenderer} from 'react-native-maps';
 
 
 
 const Tab = createBottomTabNavigator();
+
+enableLatestRenderer();
 
 export default function App() {
 
