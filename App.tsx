@@ -107,9 +107,10 @@ export default function App() {
           headerStyle: {
             backgroundColor: '#2192FF',
           },
+          headerShown:false,
           headerTintColor: '#fff',
           headerTitleStyle: {
-            fontWeight: 'bold',
+          fontWeight: 'bold',
           },
         }} />
    

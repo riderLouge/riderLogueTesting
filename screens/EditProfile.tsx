@@ -2,11 +2,12 @@ import React from "react";
 import { View, Text, Alert } from "react-native";
 
 
-export default function EditProfile() {
+const EditProfile = () => {
     return(
         <View>
-            Alert.alert('2');
-            <Text>hlo</Text>
+            
         </View>
     );
-}
+};
+
+export default EditProfile;

@@ -26,7 +26,9 @@ export default function ProfileScreen() {
 
   }
   const EditProfile= () =>{
-
+   <Tab.Navigator>
+        <Tab.Screen name="EditProfile" component={EditProfile}></Tab.Screen>
+    </Tab.Navigator>
   } 
   var screen=""
   const MenuScreen = () =>{
