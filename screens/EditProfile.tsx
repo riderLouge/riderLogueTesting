@@ -1,5 +1,5 @@
-import React from "react";
-import { StyleSheet, View, Text, ToastAndroid, Alert, TextInput, ScrollView } from "react-native";
+import * as React from "react";
+import { StyleSheet, View, Text, ToastAndroid, Alert, TextInput, ScrollView, Platform } from "react-native";
 import { launchImageLibrary } from "react-native-image-picker";
 import { Avatar } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
@@ -7,11 +7,14 @@ import Icon2 from 'react-native-vector-icons/Ionicons';
 import Icon3 from 'react-native-vector-icons/FontAwesome5';
 import { useNavigation } from '@react-navigation/native';
 import { Button } from "react-native-elements";
+import DocumentPicker from 'react-native-document-picker';
+import RNFetchBlob from 'rn-fetch-blob';
+import firebase from '@react-native-firebase/app';
+import auth from '@react-native-firebase/auth';
+import database from '@react-native-firebase/database';
+import storage from '@react-native-firebase/storage';
 
-
-
-export default function App (){
-
+const EditProfile = () => {
 
     const[Pic,SetPic]=React.useState('');
     const Navigation = useNavigation()
@@ -50,6 +53,72 @@ export default function App (){
         setImgMsg('IMAGE REMOVED')
     }
 
+    async function choseFile(){
+        try {
+            const file = await DocumentPicker.pickSingle({
+                type: [DocumentPicker.types.images],
+            });
+            console.log(file.uri)
+            const path = file.uri;
+            const result = await RNFetchBlob.fs.readFile(path, "base64")
+            uploadImageToFirebaseStorage(result, file);
+        } catch (err) {
+            if(DocumentPicker.isCancel(err)){
+
+            }
+            else {
+                throw err;
+            }
+            
+        }
+    }
+ 
+    async function normalizePath(path) {
+        if(Platform.OS==='ios' || Platform.OS==='android'){
+            const filePrefix = 'file://'
+            if(path.startsWith(filePrefix)){
+                path=path.substring(filePrefix.length);
+                try {
+                    path=decodeURI(path)
+                } catch (e) {
+                    
+                }
+            }
+        }
+        return path;
+    }
+
+    async function uploadImageToFirebaseStorage(result, file) {
+        const uploadTask = storage().ref(`images/${file.name}`).putString(result,'base64',{contentType: file.type  });
+        uploadTask.on('state_changed', 
+    (snapshot) => {
+        // Observe state change events such as progress, pause, and resume
+        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log('Upload is ' + progress + '% done');
+        switch (snapshot.state) {
+        case 'paused':
+            console.log('Upload is paused');
+            break;
+        case 'running':
+            console.log('Upload is running');
+            break;
+        }
+    }, 
+    (error) => {
+        console.log(error)
+        // Handle unsuccessful uploads
+    }, 
+    () => {
+        // Handle successful uploads on complete
+        // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+        // getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+        // console.log('File available at', downloadURL);
+        // });
+    }
+    );
+    }
+
     return(
         <View style={{flex:1, flexDirection:'column'}}>
             <ScrollView>
@@ -81,7 +150,7 @@ export default function App (){
                                      type="outline"
                                      buttonStyle={{borderColor:'white'}}
                                      titleStyle={{fontSize:10, color:'white'}}
-                                     onPress={() => uploadImage()}>
+                                     onPress={choseFile}>
                                 </Button>
                             </View>
                             <View style={styles.removeImage}>
@@ -175,3 +244,6 @@ const styles = StyleSheet.create({
       color: "white"
      }
   });
+
+
+  export default EditProfile;

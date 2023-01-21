@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "548119895035",
+    "project_id": "riderlogue-f80a1",
+    "storage_bucket": "riderlogue-f80a1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:548119895035:android:5d53adc052dfef0a9e495e",
+        "android_client_info": {
+          "package_name": "com.gearsix"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "548119895035-043ove3ms697g4tadhib0k6oo9pkhris.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gearsix",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "548119895035-fn0ffnv5c7sukuuf0f6gcrbpocnmktu1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCk9c17YcbGI56NzfzJCqsB5o7cd_5CpOg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "548119895035-fn0ffnv5c7sukuuf0f6gcrbpocnmktu1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

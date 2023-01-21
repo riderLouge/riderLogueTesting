@@ -173,7 +173,7 @@ const ProfileScreen = () => {
             </View>
           </View>
           <View style={{ flex:2, backgroundColor:'black', marginTop:'39%',alignItems:'center'}}>
-              <View style={{height:'8%', width:'80%', borderWidth:1, borderColor:'#121212', alignItems:'center', justifyContent:'center', borderRadius:5}}>
+              <View style={{height:'8%', width:'80%', borderWidth:1, borderColor:'grey', alignItems:'center', justifyContent:'center', borderRadius:5}}>
                 <Text style={{color:'grey'}}>ALBUM</Text>
               </View>
               <View style={{paddingTop:'5%'}}>
