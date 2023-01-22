@@ -14,7 +14,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from './screens/HomeScreen';
 import InitialScreen from './screens/InitialScreen';
 import ContactScreen from './screens/ContactScreen';
-import MapScreen from './screens/MapScreen';
+import MapStaringScreen from './screens/MapInitialScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import SplashScreen from 'react-native-splash-screen';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -87,15 +87,8 @@ const App = () => {
                   fontWeight: 'bold',
                 },
               }} />
-          <Tab.Screen name="Map" component={MapScreen}  options={{
-                title: 'Map',
-                headerStyle: {
-                  backgroundColor: '#2192FF',
-                },
-                headerTintColor: '#fff',
-                headerTitleStyle: {
-                  fontWeight: 'bold',
-                },
+          <Tab.Screen name="Map" component={MapStaringScreen}  options={{
+              headerShown:false
               }}
               
           />
