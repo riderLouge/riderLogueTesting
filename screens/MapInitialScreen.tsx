@@ -1,7 +1,15 @@
 import React from "react";
 import { Button, View, Text, StyleSheet, ImageBackground,TextInput } from "react-native";
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import NewTrip from '../screens/NewTrip';
+import OldTrip from '../screens/OldTrip';
+
 
 export default function MapInitialScreen(){
+
+const Tab = createMaterialTopTabNavigator();
+
   return (
     <View style={{ flex: 1, alignItems: "center",width:"100%", }}>
         <View style={styles.tripDetails}>
@@ -14,18 +22,21 @@ export default function MapInitialScreen(){
           uri:
             'https://images.pexels.com/photos/2291428/pexels-photo-2291428.jpeg?auto=compress&cs=tinysrgb&w=600',
         }}>
-     
-       <TextInput
-        style={styles.input}
-         placeholder="From"
-      />
       <TextInput
         style={styles.input}
-        placeholder="To"
+        placeholder="Search"
       />
 
     </ImageBackground>
+
+    <View style={{backgroundColor:"#003049",height:"100%",width:"100%",marginTop:10}}>
+    <Tab.Navigator>
+      <Tab.Screen name="Start Trip" component={NewTrip} />
+      <Tab.Screen name=" Trip History" component={OldTrip} />
+    </Tab.Navigator>
     </View>
+    </View>
+    
   );
 }
 
@@ -33,7 +44,7 @@ const styles = StyleSheet.create({
   
   destination: {
     width: 325,
-    height: 160,
+    height: 80,
     borderRadius: 30,
   },
   imageBackGround: {
