@@ -13,14 +13,28 @@ import firebase from '@react-native-firebase/app';
 import auth from '@react-native-firebase/auth';
 import database from '@react-native-firebase/database';
 import storage from '@react-native-firebase/storage';
+import { getStorage, ref, getDownloadURL } from 'firebase/storage';
+import { useEffect } from "react";
+import firestore from '@react-native-firebase/firestore';
 
-const EditProfile = () => {
-
+    
+    const EditProfile = () => {
     const[Pic,SetPic]=React.useState('');
     const Navigation = useNavigation()
     const setImgMsg = msg => {
         ToastAndroid.showWithGravity(msg,ToastAndroid.SHORT,ToastAndroid.CENTER)
     }
+    useEffect(() => {
+        const func = async () => {
+          const storage = getStorage();
+          const reference = ref(storage, '/IMG-20230123-WA0059.jpg');
+          await getDownloadURL(reference).then((x) => {
+            SetPic(x);
+          })
+        }
+    
+        if (Pic == undefined) {func()};
+      }, []);
 
     const uploadImage = () => {
         let options={
@@ -61,7 +75,24 @@ const EditProfile = () => {
             console.log(file.uri)
             const path = file.uri;
             const result = await RNFetchBlob.fs.readFile(path, "base64")
-            uploadImageToFirebaseStorage(result, file);
+            // uploadImageToFirebaseStorage(result, file);
+            firestore()
+            .collection('posts')
+            .add({
+                name: 'Ada Lovelace',
+                age: 30,
+                postImg: file.uri,
+            })
+            .then(() => {
+                console.log('Post Added!');
+                Alert.alert(
+                  'Post published!',
+                  'Your post has been published Successfully!',
+                );
+              })
+              .catch((error) => {
+                console.log('Something went wrong with added post to firestore.', error);
+              });
         } catch (err) {
             if(DocumentPicker.isCancel(err)){
 
@@ -142,7 +173,7 @@ const EditProfile = () => {
                             <Avatar.Image
                             style={{backgroundColor:"#121212"}}
                             size={120}
-                            source={{uri:'data:image/png;base64,'+Pic}} />
+                            source={{uri:'data:image/jpg;base64,'+Pic}} />
                         </View>
                         <View style={[styles.centerContent, {marginTop:'10%', marginLeft:'5%', flexDirection:'row'}]}>
                             <View>
