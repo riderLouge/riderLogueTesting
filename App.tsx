@@ -11,7 +11,7 @@
 import React, { useEffect } from 'react';
 import { NavigationContainer,DarkTheme,DefaultTheme } from "@react-navigation/native";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HomeScreen from './screens/HomeScreen';
+import HomeScreen from './screens/Settings';
 import InitialScreen from './screens/InitialScreen';
 import ContactScreen from './screens/ContactScreen';
 import MapStaringScreen from './screens/MapInitialScreen';
@@ -23,6 +23,7 @@ import {enableLatestRenderer} from 'react-native-maps';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import EditProfile from './screens/EditProfile';
 import AddFriends from './screens/AddFriends';
+import Settings from './screens/Settings';
 
 
 
@@ -40,23 +41,23 @@ const App = () => {
 
   const BottomTabScreen = () => {
     return (
-        <Tab.Navigator initialRouteName="Home" 
+        <Tab.Navigator initialRouteName="Profile" 
         
         screenOptions={({ route }) => ({
           tabBarStyle: { backgroundColor: 'black' },
                 tabBarIcon: ({ focused, color, size }) => {
                   let iconName;
     
-                  if (route.name === 'Home') {
-                    iconName = focused? 'md-home' : 'home-outline';
+                  if (route.name === 'Profile') {
+                    iconName = focused ? 'person' : 'person-outline';
                   } else if (route.name === 'Qr Code') {
                     iconName = focused ? 'qr-code' : 'qr-code-outline';
-                  } else if (route.name === 'Map') {
+                  } else if (route.name === 'Trip') {
                     iconName = focused ? 'ios-map' : 'map-outline';
                   }else if (route.name === 'Shop') {
                     iconName = focused ? 'ios-cart' : 'ios-cart-outline';
-                  }else if (route.name === 'Profile') {
-                    iconName = focused ? 'person' : 'person-outline';
+                  }else if (route.name === 'settings') {
+                    iconName = focused? 'md-settings' : 'md-settings-outline';
                   }
     
                   // You can return any component that you like here!
@@ -66,28 +67,30 @@ const App = () => {
                 //tabBarInactiveTintColor: 'gray',
               })}
         >
-          <Tab.Screen name="Home"  component={HomeScreen}  options={{
-                title: 'Home',
-                headerStyle: {
-                  backgroundColor: '#2192FF',
-                },
-                headerTintColor: '#fff',
-                headerTitleStyle: {
-                  fontWeight: 'bold',
-                },
-              }} />
+          <Tab.Screen name="Profile" component={ProfileScreen}  options={{
+              title: 'Profile',
+              headerStyle: {
+                backgroundColor: '#121212',
+              },
+              headerShown:false,
+              headerTintColor: '#fff',
+              headerTitleStyle: {
+              fontWeight: 'bold',
+              },
+            }} />
           <Tab.Screen name="Qr Code" component={InitialScreen} 
           options={{
                 title: 'Qr code',
                 headerStyle: {
-                  backgroundColor: '#2192FF',
+                  backgroundColor: 'grey',
                 },
+                headerShown:false,
                 headerTintColor: '#fff',
                 headerTitleStyle: {
                   fontWeight: 'bold',
                 },
               }} />
-          <Tab.Screen name="Map" component={MapStaringScreen}  options={{
+          <Tab.Screen name="Trip" component={MapStaringScreen}  options={{
               headerShown:false
               }}
               
@@ -95,22 +98,22 @@ const App = () => {
           <Tab.Screen name="Shop" component={ContactScreen}  options={{
                 title: 'Shop',
                 headerStyle: {
-                  backgroundColor: '#2192FF',
+                  backgroundColor: 'grey',
                 },
                 headerTintColor: '#fff',
                 headerTitleStyle: {
                   fontWeight: 'bold',
                 },
               }}/>
-          <Tab.Screen name="Profile" component={ProfileScreen}  options={{
-                title: 'Profile',
+         <Tab.Screen name="settings"  component={Settings}  options={{
+                title: 'Settings',
                 headerStyle: {
-                  backgroundColor: '#121212',
+                  backgroundColor: 'grey',
                 },
                 headerShown:false,
                 headerTintColor: '#fff',
                 headerTitleStyle: {
-                fontWeight: 'bold',
+                  fontWeight: 'bold',
                 },
               }} />
         

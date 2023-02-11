@@ -1,6 +1,5 @@
 import * as React from "react";
-import { StyleSheet, View, Text, ToastAndroid, Alert, TextInput, ScrollView, Platform } from "react-native";
-import { launchImageLibrary } from "react-native-image-picker";
+import { StyleSheet, View, Text, ToastAndroid, Alert, TextInput, ScrollView, Platform, Dimensions, ImageBackground } from "react-native";
 import { Avatar } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import Icon2 from 'react-native-vector-icons/Ionicons';
@@ -10,64 +9,45 @@ import { Button } from "react-native-elements";
 import DocumentPicker from 'react-native-document-picker';
 import RNFetchBlob from 'rn-fetch-blob';
 import firebase from '@react-native-firebase/app';
-import auth from '@react-native-firebase/auth';
-import database from '@react-native-firebase/database';
-import storage from '@react-native-firebase/storage';
-import { getStorage, ref, getDownloadURL } from 'firebase/storage';
-import { useEffect } from "react";
 import firestore from '@react-native-firebase/firestore';
 
-    
-    const EditProfile = () => {
+var {width,height} = Dimensions.get('window')
+
+const EditProfile = () => {
+
     const[Pic,SetPic]=React.useState('');
-    const Navigation = useNavigation()
-    const setImgMsg = msg => {
-        ToastAndroid.showWithGravity(msg,ToastAndroid.SHORT,ToastAndroid.CENTER)
-    }
-    useEffect(() => {
-        const func = async () => {
-          const storage = getStorage();
-          const reference = ref(storage, '/IMG-20230123-WA0059.jpg');
-          await getDownloadURL(reference).then((x) => {
-            SetPic(x);
-          })
-        }
+    const[CoverPic,SetCoverPic]=React.useState('');
+    const[ProfileName,SetProfileName]=React.useState('');
+    const[FirstName,SetFirstName]=React.useState('');
+    const[LastName,SetLastName]=React.useState('');
+    const[DOB,SetDOB]=React.useState('');
+    const[PhoneNumber,SetPhoneNumber]=React.useState('');
+    const[Email,SetEmail]=React.useState('');
+    const[Country,SetCountry]=React.useState('');
+    const[City,SetCity]=React.useState('');
+    const Navigation = useNavigation();
+    const db = firebase.firestore();
     
-        if (Pic == undefined) {func()};
-      }, []);
-
-    const uploadImage = () => {
-        let options={
-        mediaType: 'photo',
-        quality: 1,
-        includeBase64: true,
-        }
-
-        launchImageLibrary(options,Response=>{
-        if(Response.didCancel){
-            setImgMsg('cancelled image selection')
-        }
-        else if(Response.errorCode == 'permission'){
-            setImgMsg('permission not satisfied')
-        }
-        else if(Response.errorCode == 'others'){
-            setImgMsg(Response.errorMessage)
-        }
-        else if(Response.assets[0].fileSize > 2097152){
-            Alert.alert('maximum image size exceded','please choose image under 2mb'[{text: 'OK'}])
-        }
-        else{
-            SetPic(Response.assets[0].base64)
-        }
+    
+    db.collection('posts').get().then((snapshot) => {
+        snapshot.docs.forEach(doc=>{
+        renderData(doc);
         })
+    })
+    function renderData(doc){
+        SetPic(doc.data().profilePic);
+        SetCoverPic(doc.data().coverPic);
+        SetProfileName(doc.data().profileName);
+        SetFirstName(doc.data().firstName);
+        SetLastName(doc.data().lastName);
+        SetDOB(doc.data().dateOfBirth);
+        SetPhoneNumber(doc.data().phoneNumber);
+        SetEmail(doc.data().email);
+        SetCountry(doc.data().country);
+        SetCity(doc.data().city);
 
     }
-    const removeImage = () => {
-        SetPic('')
-        setImgMsg('IMAGE REMOVED')
-    }
-
-    async function choseFile(){
+    async function profilePic(){
         try {
             const file = await DocumentPicker.pickSingle({
                 type: [DocumentPicker.types.images],
@@ -75,182 +55,181 @@ import firestore from '@react-native-firebase/firestore';
             console.log(file.uri)
             const path = file.uri;
             const result = await RNFetchBlob.fs.readFile(path, "base64")
-            // uploadImageToFirebaseStorage(result, file);
-            firestore()
-            .collection('posts')
-            .add({
-                name: 'Ada Lovelace',
-                age: 30,
-                postImg: file.uri,
-            })
-            .then(() => {
-                console.log('Post Added!');
-                Alert.alert(
-                  'Post published!',
-                  'Your post has been published Successfully!',
-                );
-              })
-              .catch((error) => {
-                console.log('Something went wrong with added post to firestore.', error);
-              });
+            SetPic(result);
         } catch (err) {
             if(DocumentPicker.isCancel(err)){
 
             }
             else {
                 throw err;
-            }
-            
+            }  
         }
     }
- 
-    async function normalizePath(path) {
-        if(Platform.OS==='ios' || Platform.OS==='android'){
-            const filePrefix = 'file://'
-            if(path.startsWith(filePrefix)){
-                path=path.substring(filePrefix.length);
-                try {
-                    path=decodeURI(path)
-                } catch (e) {
-                    
-                }
-            }
-        }
-        return path;
-    }
+    async function coverPic(){
+        try {
+            const file = await DocumentPicker.pickSingle({
+                type: [DocumentPicker.types.images],
+            });
+            console.log(file.uri)
+            const path = file.uri;
+            const result = await RNFetchBlob.fs.readFile(path, "base64")
+            SetCoverPic(result);
+        } catch (err) {
+            if(DocumentPicker.isCancel(err)){
 
-    async function uploadImageToFirebaseStorage(result, file) {
-        const uploadTask = storage().ref(`images/${file.name}`).putString(result,'base64',{contentType: file.type  });
-        uploadTask.on('state_changed', 
-    (snapshot) => {
-        // Observe state change events such as progress, pause, and resume
-        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log('Upload is ' + progress + '% done');
-        switch (snapshot.state) {
-        case 'paused':
-            console.log('Upload is paused');
-            break;
-        case 'running':
-            console.log('Upload is running');
-            break;
+            }
+            else {
+                throw err;
+            }  
         }
-    }, 
-    (error) => {
-        console.log(error)
-        // Handle unsuccessful uploads
-    }, 
-    () => {
-        // Handle successful uploads on complete
-        // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-        // getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-        // console.log('File available at', downloadURL);
-        // });
     }
-    );
+    function save(){
+        firestore().collection('posts').add({
+            profilePic: Pic,
+            coverPic: CoverPic,
+            profileName: ProfileName,
+            firstName: FirstName,
+            lastName: LastName,
+            dateOfBirth: DOB,
+            phoneNumber: PhoneNumber,
+            email: Email,
+            country: Country,
+            city: City,
+        })
+        .then(() => {
+            console.log('Post Added!');
+            Alert.alert(
+              'Post published!',
+              'Your post has been published Successfully!',
+            );
+        })
+        .catch((error) => {
+            console.log('Something went wrong with added post to firestore.', error);
+        });
     }
-
+  
     return(
-        <View style={{flex:1, flexDirection:'column'}}>
+        <View style={{flex:1}}>
             <ScrollView>
-                <View style={{flex:.5, backgroundColor:'black', flexDirection:'row', justifyContent:'space-between'}}>
-                    <Icon2 name="ios-chevron-back-outline" size={23} style={{paddingLeft:'5%', paddingTop:'2%'}} 
-                         onPress={()=> Navigation.goBack()}>
-                    </Icon2>
-                    <View style={{paddingRight:'5%'}}>
-                        <Button  
-                            mode='contained' color="#121212" title='save profile'
-                            type="outline"
-                            buttonStyle={{borderColor:'white'}}
-                            onPress={()=> Navigation.push("ProfileScreen")}
-                            titleStyle={{fontSize:10, color:'white'}}>
-                        </Button>
-                    </View>
+            <View style={{flex:.5, flexDirection:'row', justifyContent:'space-between', marginBottom:'2%'}}>
+                <Text style={{paddingLeft:'2%', fontSize:20, fontStyle:"italic", paddingTop:'2%'}}>Edit Profile</Text>
+                <View style={{paddingRight:'2%'}}>
+                    <Button  
+                        mode='contained' color="#121212" title='save profile'
+                        type="outline"
+                        buttonStyle={{borderColor:'white'}}
+                        onPress={() => {save(); Navigation.push("ProfileScreen")}}
+                        titleStyle={{fontSize:width/40, color:'white'}}>
+                    </Button>
                 </View>
-                <View style={{flex:10, backgroundColor:'black'}}>
-                    <View style={{flexDirection:'row'}}>
-                        <View style={{justifyContent: 'center',  marginTop: 15, paddingLeft:'3%'}}>
-                            <Avatar.Image
-                            style={{backgroundColor:"#121212"}}
-                            size={120}
-                            source={{uri:'data:image/jpg;base64,'+Pic}} />
-                        </View>
-                        <View style={[styles.centerContent, {marginTop:'10%', marginLeft:'5%', flexDirection:'row'}]}>
-                            <View>
-                                <Button mode='contained' color="#121212" title='Upload Image'
-                                     type="outline"
-                                     buttonStyle={{borderColor:'white'}}
-                                     titleStyle={{fontSize:10, color:'white'}}
-                                     onPress={choseFile}>
-                                </Button>
+            </View>
+            <View style={{flex:10}}>
+                <View style={{flexDirection:'row', borderWidth:.5, borderColor:'grey', height: width/2}}>
+                    <ImageBackground
+                        style={{flex:1}}
+                        source={{uri:'data:image/jpg;base64,'+CoverPic}}>
+                        <View>
+                            <View style={{justifyContent: 'center', paddingLeft:'3%'}}>
+                                <View style={{backgroundColor:'black', width: width/2.9, borderRadius:120, height: width/2.9 ,marginTop: width/12}}>
+                                    <View style={{zIndex: 1}}>
+                                        <Avatar.Image
+                                        style={{backgroundColor:"#121212", marginLeft:'1.5%', marginTop:'2%'}}
+                                        size={width/3}
+                                        source={{uri:'data:image/jpg;base64,'+Pic}} />
+                                        <Icon2 name="camera-sharp"
+                                            size={width/13}
+                                            style={styles.profileiconContainer}
+                                            onPress={profilePic}>
+                                        </Icon2>
+                                    </View>
+                                </View>
                             </View>
-                            <View style={styles.removeImage}>
-                                <Button mode='contained' color="#121212" title='remove Image'  
-                                    type="outline"
-                                    buttonStyle={{borderColor:'white'}}
-                                    titleStyle={{fontSize:10, color:'white'}}
-                                    onPress={() => removeImage()}>
-                                </Button>
+                            <View style={[styles.centerContent, {marginTop:'10%', marginLeft:'5%', flexDirection:'row'}]}>
+                                <View style={styles.removeImage}>
+                                    <Icon2 name="camera-sharp"
+                                        size={width/13}
+                                        style={styles.iconContainer}
+                                        onPress={coverPic}>
+                                    </Icon2>
+                                </View>
                             </View>
                         </View>
-                    </View>
-                    <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', paddingTop:'4%'}}>
-                        <Icon2 name="ios-person-circle-outline" size={30}></Icon2>
-                        <TextInput 
-                            placeholder="First Name" 
-                            placeholderTextColor={'#666666'}
-                            style={[styles.textInput , {width:'70%', marginLeft: '3%', marginRight:'7%'}]}></TextInput>
-                    </View>
-                    <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', paddingTop:'4%'}}>
-                        <Icon2 name="ios-person-circle-outline" size={30}></Icon2>
-                        <TextInput 
-                            placeholder="Last Name" 
-                            placeholderTextColor={'#666666'}
-                            style={[styles.textInput , {width:'70%', marginLeft: '3%', marginRight:'7%'}]}></TextInput>
-                    </View>
-                    <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', paddingTop:'4%'}}>
-                        <Icon2 name="ios-calendar" size={30}></Icon2>
-                        <TextInput 
-                            placeholder="DOB" 
-                            placeholderTextColor={'#666666'}
-                            style={[styles.textInput , {width:'70%', marginLeft: '3%', marginRight:'7%'}]}></TextInput>
-                    </View>
-                    <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', paddingTop:'4%'}}>
-                        <Icon name="phone" size={30}></Icon>
-                        <TextInput 
-                            placeholder="Phone Number" 
-                            placeholderTextColor={'#666666'}
-                            style={[styles.textInput , {width:'70%', marginLeft: '3%', marginRight:'7%'}]}></TextInput>
-                    </View>
-                    <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', paddingTop:'4%'}}>
-                        <Icon2 name="mail-outline" size={30}></Icon2>
-                        <TextInput 
-                            placeholder="E-mail" 
-                            placeholderTextColor={'#666666'}
-                            style={[styles.textInput , {width:'70%', marginLeft: '3%', marginRight:'7%'}]}></TextInput>
-                    </View>
-                    <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', paddingTop:'4%'}}>
-                        <Icon2 name="ios-briefcase-outline" size={30}></Icon2>
-                        <TextInput 
-                            placeholder="Occupation" 
-                            placeholderTextColor={'#666666'}
-                            style={[styles.textInput , {width:'70%', marginLeft: '3%', marginRight:'7%'}]}></TextInput>
-                    </View>
-                    <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', paddingTop:'4%'}}>
-                        <Icon3 name="globe-americas" size={30}></Icon3>
-                        <TextInput 
-                            placeholder="Country" 
-                            placeholderTextColor={'#666666'}
-                            style={[styles.textInput , {width:'70%', marginLeft: '3%', marginRight:'7%'}]}></TextInput>
-                    </View>
-                    <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', paddingTop:'4%'}}>
-                        <Icon2 name="location-sharp" size={30}></Icon2>
-                        <TextInput 
-                            placeholder="City" 
-                            placeholderTextColor={'#666666'}
-                            style={[styles.textInput , {width:'70%', marginLeft: '3%', marginRight:'7%'}]}></TextInput>
-                    </View>
+                    </ImageBackground>
                 </View>
+                <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', paddingTop:'4%'}}>
+                    <Icon name="ninja" size={width/12}></Icon>
+                    <TextInput 
+                        placeholder="Profile Name" 
+                        placeholderTextColor={'#666666'}
+                        onChangeText={newProfileName => SetProfileName(newProfileName)}
+                        defaultValue={ProfileName}
+                        style={[styles.textInput , {width:'70%', marginLeft: '3%', marginRight:'7%'}]}>
+                        </TextInput>
+                </View>
+                <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', paddingTop:'4%'}}>
+                    <Icon2 name="ios-person-circle-outline" size={width/12}></Icon2>
+                    <TextInput 
+                        placeholder="First Name" 
+                        placeholderTextColor={'#666666'}
+                        onChangeText={newFirstName => SetFirstName(newFirstName)}
+                        defaultValue={FirstName}
+                        style={[styles.textInput , {width:'70%', marginLeft: '3%', marginRight:'7%'}]}></TextInput>
+                </View>
+                <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', paddingTop:'4%'}}>
+                    <Icon2 name="ios-person-circle-outline" size={width/12}></Icon2>
+                    <TextInput 
+                        placeholder="Last Name" 
+                        placeholderTextColor={'#666666'}
+                        onChangeText={newText => SetLastName(newText)}
+                        defaultValue={LastName}
+                        style={[styles.textInput , {width:'70%', marginLeft: '3%', marginRight:'7%'}]}></TextInput>
+                </View>
+                <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', paddingTop:'4%'}}>
+                    <Icon2 name="ios-calendar" size={width/12}></Icon2>
+                    <TextInput 
+                        placeholder="DOB" 
+                        placeholderTextColor={'#666666'}
+                        onChangeText={newText => SetDOB(newText)}
+                        defaultValue={DOB}
+                        style={[styles.textInput , {width:'70%', marginLeft: '3%', marginRight:'7%'}]}></TextInput>
+                </View>
+                <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', paddingTop:'4%'}}>
+                    <Icon name="phone" size={width/12}></Icon>
+                    <TextInput 
+                        placeholder="Phone Number" 
+                        placeholderTextColor={'#666666'}
+                        onChangeText={newText => SetPhoneNumber(newText)}
+                        defaultValue={PhoneNumber}
+                        style={[styles.textInput , {width:'70%', marginLeft: '3%', marginRight:'7%'}]}></TextInput>
+                </View>
+                <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', paddingTop:'4%'}}>
+                    <Icon2 name="mail-outline" size={width/12}></Icon2>
+                    <TextInput 
+                        placeholder="E-mail" 
+                        placeholderTextColor={'#666666'}
+                        onChangeText={newText => SetEmail(newText)}
+                        defaultValue={Email}
+                        style={[styles.textInput , {width:'70%', marginLeft: '3%', marginRight:'7%'}]}></TextInput>
+                </View>
+                <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', paddingTop:'4%'}}>
+                    <Icon3 name="globe-americas" size={width/12}></Icon3>
+                    <TextInput 
+                        placeholder="Country" 
+                        placeholderTextColor={'#666666'}
+                        onChangeText={newText => SetCountry(newText)}
+                        defaultValue={Country}
+                        style={[styles.textInput , {width:'70%', marginLeft: '3%', marginRight:'7%'}]}></TextInput>
+                </View>
+                <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', paddingTop:'4%'}}>
+                    <Icon2 name="location-sharp" size={width/12}></Icon2>
+                    <TextInput 
+                        placeholder="City" 
+                        placeholderTextColor={'#666666'}
+                        onChangeText={newText => SetCity(newText)}
+                        defaultValue={City}
+                        style={[styles.textInput , {width:'70%', marginLeft: '3%', marginRight:'7%'}]}></TextInput>
+                </View>
+            </View>
             </ScrollView>
         </View>
     );
@@ -273,8 +252,19 @@ const styles = StyleSheet.create({
       borderBottomWidth: 1,
       borderColor: "#121212",
       color: "white"
-     }
+     },
+     iconContainer: {
+      color:'silver',
+      alignSelf: 'flex-end',
+      bottom: width/1.9,
+      left: width/2.5,
+      zIndex: 1
+    },
+    profileiconContainer: {
+      color:'silver',
+      alignSelf: 'flex-end',
+      bottom: width/3.3,
+      zIndex: 1
+    }
   });
-
-
-  export default EditProfile;
+export default EditProfile;
