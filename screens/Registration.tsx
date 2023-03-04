@@ -94,7 +94,7 @@ const Registration = () => {
                                   borderBottomWidth:0.5,
                                   borderBottomColor:'white',
                                   width:(width-40)}}>
-                        <Icon name="person-outline" size={width/20} style={{color:'white'}}></Icon>
+                        <Icon name="person" size={width/20} style={{color:'white'}}></Icon>
                         <TextInput
                             style={styles.textInput}
                             placeholder="FirstName"
@@ -108,7 +108,7 @@ const Registration = () => {
                                   borderBottomWidth:0.5,
                                   borderBottomColor:'white',
                                   width:(width-40)}}>
-                        <Icon name="person-outline" size={width/20} style={{color:'white'}}></Icon>
+                        <Icon name="person" size={width/20} style={{color:'white'}}></Icon>
                         <TextInput
                             style={styles.textInput}
                             placeholder="LastName"
@@ -151,14 +151,14 @@ const Registration = () => {
                             type="solid"
                             buttonStyle={{width:(width/1.1),
                             height:(width/7),
-                            backgroundColor:'#690367',
+                            backgroundColor:'#1f1e1e',
                             marginTop:40}}                           
                             onPress={() => registerUser(Email,Password,FirstName,LastName,)}>
                         </Button>
                     </View>
                     <View style={{flexDirection:'row', marginTop:30}}>
-                        <Text style={{color:'white'}}>Already have an account ?</Text>
-                        <Text style={{color:'#7a0278'}} onPress={()=> Navigation.push("Login")}>  Sign In</Text>
+                        <Text style={{color:'grey'}}>Already have an account ?</Text>
+                        <Text style={{color:'white'}} onPress={()=> Navigation.push("Login")}>  Sign In</Text>
                     </View>
                 </View>
             </View>

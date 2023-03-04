@@ -86,7 +86,7 @@ const Login = () => {
                         type="solid"
                         buttonStyle={{width:(width/1.1),
                                       height:(width/9),
-                                      backgroundColor:'#690367',
+                                      backgroundColor:'#1f1e1e',
                                       borderRadius:4,
                                       marginTop:45}}
                         onPress={() => loginUser(Email,Password)}>
@@ -128,8 +128,8 @@ const Login = () => {
                         </View>
                     </View>
                     <View style={{flexDirection:'row', marginTop:10}}>
-                        <Text style={{color:'white'}}>Don't have an account?</Text>
-                        <Text style={{color:'#7a0278'}} onPress={()=> Navigation.push("Registration")}>  Sign Up</Text>
+                        <Text style={{color:'grey'}}>Don't have an account?</Text>
+                        <Text style={{color:'white'}} onPress={()=> Navigation.push("Registration")}>  Sign Up</Text>
                     </View>
                 </View>
             </View>
