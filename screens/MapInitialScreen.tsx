@@ -14,10 +14,8 @@ export default function MapInitialScreen(){
 const Tab = createMaterialTopTabNavigator();
 
   return (
-    <View style={{ flex: 1, alignItems: "center",width:"100%", }}>
-      <ScrollView>
-        <View>
-          <GooglePlacesAutocomplete 
+    <View style={{ flex: 1, backgroundColor:'black', flexDirection:'column'}}>
+        <GooglePlacesAutocomplete 
             placeholder='Enter Location'
             textInputProps={{
               placeholderTextColor: 'grey',
@@ -32,6 +30,8 @@ const Tab = createMaterialTopTabNavigator();
                 paddingTop:'6%',
                 width: width*0.9,
                 alignSelf:'center',
+                position:'absolute',
+                zIndex:2
               },
             }}
             query={{
@@ -41,27 +41,27 @@ const Tab = createMaterialTopTabNavigator();
             onPress={(data, details = null) => {
               console.log(data, details);
             }}
-          />
-        </View>
-        <View style={{marginTop:'5%'}}>
-          <View style={{height:'8%', marginBottom:'5%', width: width-50, borderWidth:1, borderColor:'grey', alignItems:'center', justifyContent:'center', borderRadius:5}}>
-            <Text style={{color:'grey'}}>Completed Rides</Text>
-          </View>
-          <View style={{paddingBottom:'5%'}}>
-              <Image source={require('../android/app/src/album/1.jpg')} style={[{width:(width-50)},{height:(width)/2.5},{borderRadius:10, opacity:0.6}]}></Image>             
-          </View>
-          <View style={{paddingBottom:'5%'}}>
-              <Image source={require('../android/app/src/album/2.png')} style={[{width:(width-50)},{height:(width)/2.5},{borderRadius:10, opacity:0.6}]}></Image>             
-          </View>
-          <View style={{paddingBottom:'5%'}}>
-              <Image source={require('../android/app/src/album/3.webp')} style={[{width:(width-50)},{height:(width)/2.5},{borderRadius:10, opacity:0.6}]}></Image>             
-          </View>
-          <View style={{paddingBottom:'5%', width:(width-50), height:(width/2.5), borderRadius:10, borderWidth:1, borderColor:'grey', justifyContent:'center', alignItems:'center', marginBottom:'10%', opacity:0.5}}>
-              <Icon name="add-outline" size={100} style={{marginTop:'5%', opacity:0.5}}></Icon>
-          </View>
-        </View>
-      </ScrollView>
-    </View>    
+        />
+        <View style={{marginTop:90, alignItems:'center'}}>
+            <ScrollView>
+            <View style={{height:50, marginBottom:'5%', width: width-50 ,borderWidth:1, backgroundColor:'#1f1e1e', alignItems:'center', justifyContent:'center', borderRadius:5}}>
+              <Text style={{color:'white'}}>Completed Rides</Text>
+            </View>
+            <View style={{paddingBottom:'5%'}}>
+                <Image source={require('../android/app/src/album/1.jpg')} style={[{width:(width-50)},{height:(width)/2.5},{borderRadius:10}]}></Image>             
+            </View>
+            <View style={{paddingBottom:'5%'}}>
+                <Image source={require('../android/app/src/album/2.png')} style={[{width:(width-50)},{height:(width)/2.5},{borderRadius:10}]}></Image>             
+            </View>
+            <View style={{paddingBottom:'5%'}}>
+                <Image source={require('../android/app/src/album/3.webp')} style={[{width:(width-50)},{height:(width)/2.5},{borderRadius:10}]}></Image>             
+            </View>
+            <View style={{paddingBottom:'5%', width:(width-50), height:(width/2.5), borderRadius:10, borderWidth:1, borderColor:'silver', justifyContent:'center', alignItems:'center', marginBottom:'10%', opacity:0.5}}>
+                <Icon name="add-outline" size={100} style={{marginTop:'5%', color:'silver'}} ></Icon>
+            </View>
+            </ScrollView>
+        </View>         
+    </View>       
   );
 }
 

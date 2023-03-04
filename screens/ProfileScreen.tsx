@@ -1,5 +1,5 @@
 import React from 'react';  
-import { View, Text, ScrollView, ImageBackground, StyleSheet, Alert, Modal, TouchableOpacity, Animated, Image, Dimensions } from "react-native";
+import { View, Text, ScrollView, StyleSheet, Dimensions} from "react-native";
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Avatar} from "react-native-paper";
 import { useNavigation } from '@react-navigation/native';
@@ -8,189 +8,87 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import Album from './Album';
 import Post from './Post';
 import { launchImageLibrary } from "react-native-image-picker";
+import { Image } from 'native-base';
 
 
-const ModalPoup = ({visible, children}) => {
-  const [showModal, setShowModal] = React.useState(visible);
-  const scaleValue = React.useRef(new Animated.Value(0)).current;
-  React.useEffect(() => {
-    toggleModal();
-  }, [visible]);
-  const toggleModal = () => {
-    if (visible) {
-      setShowModal(true);
-      Animated.spring(scaleValue, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-      }).start();
-    } else {
-      setTimeout(() => setShowModal(false), 200);
-      Animated.timing(scaleValue, {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: true,
-      }).start();
-    }
-  };
-  return (
-    <Modal transparent visible={showModal}>
-      <View style={styles.modalBackGround}>
-        <View
-          style={[styles.modalContainer]}>
-          {children}
-        </View>
-      </View>
-    </Modal>
-  );
-}
 
 const ProfileScreen = () => {
 
+  const [show,setShow]=React.useState(false);
   const [tabName,SetTabName]=React.useState(""); 
-  const[Pic,SetPic]=React.useState('');
+  const [Pic,SetPic]=React.useState('');
   const Tab = createMaterialTopTabNavigator();
   const Navigation = useNavigation()
   const [IsVisible,SetIsVisible]=React.useState(false);
   const [visible, setVisible] = React.useState(false);
-  const MenuScreen = () =>{
-      SetIsVisible(true)
-    }
-    const imagesScreen = () =>{
-      SetTabName("imagesScreen")
-    }
-    const albumScreen = () =>{
-      SetTabName("albumScreen")
-    }
-    const setImgMsg = msg => {
-      ToastAndroid.showWithGravity(msg,ToastAndroid.SHORT,ToastAndroid.CENTER)
-  }
-
-  const uploadImage = () => {
-      let options={
-      mediaType: 'photo',
-      quality: 1,
-      includeBase64: true,
-      }
-
-      launchImageLibrary(options,Response=>{
-      if(Response.didCancel){
-          setImgMsg('cancelled image selection')
-      }
-      else if(Response.errorCode == 'permission'){
-          setImgMsg('permission not satisfied')
-      }
-      else if(Response.errorCode == 'others'){
-          setImgMsg(Response.errorMessage)
-      }
-      else if(Response.assets[0].fileSize > 2097152){
-          Alert.alert('maximum image size exceded','please choose image under 2mb'[{text: 'OK'}])
-      }
-      else{
-          SetPic(Response.assets[0].base64)
-          
-      }
-      })
-
-  }
+  const [profileName,SetProfileName] = React.useState('Nightmare');
+ 
   var {width,height} = Dimensions.get('window')
+  var images = [
+    require('../android/app/src/images/1.png'),
+    require('../android/app/src/images/2.jpeg'),
+    require('../android/app/src/images/3.jpg'),
+    require('../android/app/src/images/4.jpg'),
+    require('../android/app/src/images/5.jpg'),
+    require('../android/app/src/images/6.jpg'),
+    require('../android/app/src/images/7.jpg'),
+    require('../android/app/src/images/1.png'),
+    require('../android/app/src/images/2.jpeg'),
+    require('../android/app/src/images/3.jpg'),
+    require('../android/app/src/images/4.jpg'),
+    require('../android/app/src/images/5.jpg'),
+    require('../android/app/src/images/6.jpg'),
+    require('../android/app/src/images/7.jpg'),
+  ]
+  renderSection = () => {
+    
+    return images.map((image,index) => {
+      
+      return(
+        <View key={index} style={[{width:(width/3.18)},
+                                  {height:(width/3.18)},
+                                  index % 3 !==0 ? {paddingLeft:2} : {paddingLeft:0},
+                                  index === 3 ? {borderTopEndRadius:10} : {borderTopLeftRadius:0}]}>
+            <Image style={{flex:1, width: undefined, height: undefined}}
+              source={image}
+              alt="posts"></Image>
+        </View>
+      )
+    })
+  }
 
   return(
-    <View style={{flex:1, flexDirection:'column', backgroundColor:'#121212'}}>
-       <ScrollView>
-        <ModalPoup visible={visible} >
-          <View style={{justifyContent:'space-between'}}>
-            <View style={styles.header}>
-              <TouchableOpacity onPress={() => setVisible(false)}>
-                  <Icon name='ios-close-outline' size={30} style={{paddingRight:'2%'}} ></Icon>
-              </TouchableOpacity>
+    <View style={{flex:1, backgroundColor:'black'}}>
+        <View style={{flexDirection:'row', alignItems:'center', justifyContent:'space-between'}}>
+            <Text style={{color:'white', fontSize:20, marginLeft:5, marginTop:5}}>{profileName}</Text>
+            <View style={{flexDirection:'row'}}>
+               <Icon name='add-circle-outline' size={30} color={'white'} style={{marginTop:5,marginRight:5 }}></Icon>
+               <Icon name='people-circle' size={30} color={'white'} style={{marginTop:5}}></Icon>
             </View>
-            <View style={{paddingLeft:'4%'}}>
-                <View style={{flexDirection:'row', paddingTop:'4%', alignItems:'center', marginBottom:'4%'}}>
-                    <Icon name="bicycle-sharp" size={18}></Icon>
-                    <Text style={{fontSize:16, paddingLeft:'5%'}} onPress={() => uploadImage()}>On Ride</Text>
-                </View>
-                <View style={{flexDirection:'row', paddingTop:'4%', alignItems:'center', marginBottom:'4%'}}>
-                    <Icon name="images-outline" size={18} ></Icon>
-                    <Text style={{fontSize:16, paddingLeft:'5%'}}>Add Album</Text>
-                </View>
-                <View style={{flexDirection:'row', paddingTop:'4%', alignItems:'center', marginBottom:'4%'}}>
-                    <Icon name="md-pencil-outline" size={18} ></Icon>
-                    <Text style={{fontSize:16, paddingLeft:'5%'}} onPress={()=> Navigation.push("EditProfile")}>Edit Profile</Text>
-                </View>
-                <View style={{flexDirection:'row', paddingTop:'4%', alignItems:'center', marginBottom:'4%'}}>
-                    <Icon name="ios-people-outline" size={18} ></Icon>
-                    <Text style={{fontSize:16, paddingLeft:'5%'}}>Add Friend</Text>
-                </View>
-                <View style={{flexDirection:'row', paddingTop:'4%', alignItems:'center', marginBottom:'4%'}}>
-                    <Icon name="ios-settings-sharp" size={18} ></Icon>
-                    <Text style={{fontSize:16, paddingLeft:'5%'}}>Settings</Text>
+        </View>
+        <View style={{width:(width-20), height:90, borderColor:'black', borderWidth:1, marginLeft:10, marginTop:10, justifyContent:'center', borderRadius:10, backgroundColor:'#1f1e1e'}}>
+            <View style={{flexDirection:'row'}}>
+                <ScrollView
+                  showsHorizontalScrollIndicator={false}
+                  horizontal={true}>
+                    <View style={{width:(width/5), height:(width/5), borderRadius:(width/8), marginLeft:10, backgroundColor:'white'}}></View>
+                    <View style={{width:(width/5), height:(width/5), borderRadius:(width/8), marginLeft:10, backgroundColor:'white'}}></View>
+                    <View style={{width:(width/5), height:(width/5), borderRadius:(width/8), marginLeft:10, backgroundColor:'white'}}></View>
+                    <View style={{width:(width/5), height:(width/5), borderRadius:(width/8), marginLeft:10, backgroundColor:'white'}}></View>
+                    <View style={{width:(width/5), height:(width/5), borderRadius:(width/8), marginLeft:10, backgroundColor:'white'}}></View>
+                    <View style={{width:(width/5), height:(width/5), borderRadius:(width/8), marginLeft:10, backgroundColor:'white'}}></View>
+                </ScrollView>
+            </View>
+        </View>
+        <ScrollView>
+            <View style={{backgroundColor:'black', width:(width-20), height:'100%', marginLeft:10, marginTop:15, borderRadius:10}}>
+                <View style={{flexDirection:'row', flexWrap:'wrap'}}>
+                    {this.renderSection()}
                 </View>
             </View>
-          </View>
-        </ModalPoup>
-        <ImageBackground
-            style={{ flex:1, backgroundColor:'#121212', flexDirection:'row', justifyContent:'space-between', position:'relative', opacity:0.8}}
-            source={{uri:'https://www.theindia.co.in/place/travelogues/articleplace/ktm-in-ladakh.jpg',}}>
-              <View>
-                <View style={{marginLeft:'5%', marginTop:'50%'}}>
-                  <View>
-                    <View style={[styles.CircleShape, {position:'relative'}]}></View>
-                    <Avatar.Image
-                        style={{backgroundColor:"grey", position:'absolute',marginLeft:'1.7%',marginTop:'1.5%', opacity:1}}
-                        size={130}
-                        source={{uri:'https://images.unsplash.com/photo-1506424482693-1f123321fa53?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NHx8cmlkZXJzfGVufDB8fDB8fA%3D%3D&w=1000&q=80',}} />
-                  </View>
-                </View>
-              </View>
-              <Icon name='menu' size={30} style={{paddingRight:'4%'}} onPress={() => setVisible(true)}>  
-              </Icon>
-          </ImageBackground>
-          <View style={{ flex:2, backgroundColor:'black', position:'absolute', marginTop:'51%',width:'100%', borderTopLeftRadius:25, borderTopRightRadius:25}}>
-            <View style={{paddingLeft:'5%', paddingTop:'5%'}}>
-              <Text style={{fontSize:25, color:'grey'}}>Vikranth Venkateswar</Text>
-              <View style={{flexDirection:'row'}}>
-                <Text style={{color:'grey'}}>On Ride</Text>
-                <Icon name='bicycle-sharp' size={13} style={{paddingLeft:'3%', paddingTop:'1%'}}></Icon>
-              </View>
-              <View>
-                <Text style={{color:'grey'}}>Bike - RC 200 ❤️</Text>
-              </View>
-              <View style={{justifyContent:'space-around', flexDirection:'row', paddingTop:'5%', paddingBottom:'5%'}}>
-                <View style={{alignItems:'center'}}>
-                  <Text>20</Text>
-                  <Text style={{color:'grey'}}>rides</Text>
-                </View>
-                <View style={{alignItems:'center'}}>
-                  <Text>148k</Text>
-                  <Text style={{color:'grey'}}>followers</Text>
-                </View>
-                <View style={{alignItems:'center'}}>
-                  <Text>28</Text>
-                  <Text style={{color:'grey'}}>following</Text>
-                </View>
-              </View>
-            </View>
-          </View>
-          <View style={{ flex:2, backgroundColor:'black', marginTop:'39%',alignItems:'center'}}>
-              <View style={{height:'8%', width:'80%', borderWidth:1, borderColor:'grey', alignItems:'center', justifyContent:'center', borderRadius:5}}>
-                <Text style={{color:'grey'}}>ALBUM</Text>
-              </View>
-              <View style={{paddingTop:'5%'}}>
-                <View style={{paddingBottom:'5%'}}>
-                <Image source={require('../android/app/src/album/1.jpg')} style={[{width:(width-50)},{height:(width)/2.5},{borderRadius:10, opacity:0.6}]}></Image>             
-                </View>
-                <View style={{paddingBottom:'5%'}}>
-                <Image source={require('../android/app/src/album/2.png')} style={[{width:(width-50)},{height:(width)/2.5},{borderRadius:10, opacity:0.6}]}></Image>             
-                </View>
-                <View style={{paddingBottom:'5%'}}>
-                <Image source={require('../android/app/src/album/3.webp')} style={[{width:(width-50)},{height:(width)/2.5},{borderRadius:10, opacity:0.6}]}></Image>             
-                </View>
-              </View>
-          </View>
-      </ScrollView>   
-   </View>
- );
+        </ScrollView>
+    </View>
+  );
 
 }
 

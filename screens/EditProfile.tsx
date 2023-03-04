@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, {Component} from 'react';
 import { StyleSheet, View, Text, ToastAndroid, Alert, TextInput, ScrollView, Platform, Dimensions, ImageBackground } from "react-native";
 import { Avatar } from "react-native-paper";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
@@ -10,6 +10,7 @@ import DocumentPicker from 'react-native-document-picker';
 import RNFetchBlob from 'rn-fetch-blob';
 import firebase from '@react-native-firebase/app';
 import firestore from '@react-native-firebase/firestore';
+
 
 var {width,height} = Dimensions.get('window')
 
@@ -27,7 +28,9 @@ const EditProfile = () => {
     const[City,SetCity]=React.useState('');
     const Navigation = useNavigation();
     const db = firebase.firestore();
+    const [count,SetCount]=React.useState(0);
     
+    var proname = "";
     
     db.collection('posts').get().then((snapshot) => {
         snapshot.docs.forEach(doc=>{
@@ -35,17 +38,18 @@ const EditProfile = () => {
         })
     })
     function renderData(doc){
-        SetPic(doc.data().profilePic);
-        SetCoverPic(doc.data().coverPic);
-        SetProfileName(doc.data().profileName);
-        SetFirstName(doc.data().firstName);
-        SetLastName(doc.data().lastName);
-        SetDOB(doc.data().dateOfBirth);
-        SetPhoneNumber(doc.data().phoneNumber);
-        SetEmail(doc.data().email);
-        SetCountry(doc.data().country);
-        SetCity(doc.data().city);
-
+        if(count==0){
+            SetPic(doc.data().profilePic);
+            SetCoverPic(doc.data().coverPic);
+            SetProfileName(doc.data().proname);
+            SetFirstName(doc.data().firstName);
+            SetLastName(doc.data().lastName);
+            SetDOB(doc.data().dateOfBirth);
+            SetPhoneNumber(doc.data().phoneNumber);
+            SetEmail(doc.data().email);
+            SetCountry(doc.data().country);
+            SetCity(doc.data().city);
+        }
     }
     async function profilePic(){
         try {
@@ -87,7 +91,7 @@ const EditProfile = () => {
         firestore().collection('posts').add({
             profilePic: Pic,
             coverPic: CoverPic,
-            profileName: ProfileName,
+            proname: ProfileName,
             firstName: FirstName,
             lastName: LastName,
             dateOfBirth: DOB,
@@ -107,7 +111,13 @@ const EditProfile = () => {
             console.log('Something went wrong with added post to firestore.', error);
         });
     }
-  
+
+const name2= ProfileName;
+
+state ={
+    name: name2
+};
+
     return(
         <View style={{flex:1}}>
             <ScrollView>
@@ -163,8 +173,12 @@ const EditProfile = () => {
                         placeholderTextColor={'#666666'}
                         onChangeText={newProfileName => SetProfileName(newProfileName)}
                         defaultValue={ProfileName}
-                        style={[styles.textInput , {width:'70%', marginLeft: '3%', marginRight:'7%'}]}>
-                        </TextInput>
+                        onPressIn={()=>{
+                            SetCount(1)
+                            SetProfileName('')
+                            console.log(count)
+                            console.log(ProfileName)}}
+                        style={[styles.textInput , {width:'70%', marginLeft: '3%', marginRight:'7%'}]}/>
                 </View>
                 <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', paddingTop:'4%'}}>
                     <Icon2 name="ios-person-circle-outline" size={width/12}></Icon2>
@@ -173,6 +187,11 @@ const EditProfile = () => {
                         placeholderTextColor={'#666666'}
                         onChangeText={newFirstName => SetFirstName(newFirstName)}
                         defaultValue={FirstName}
+                        onPressIn={()=>{
+                            SetCount(1)
+                            SetFirstName('')
+                            console.log(count)
+                            console.log(FirstName)}}
                         style={[styles.textInput , {width:'70%', marginLeft: '3%', marginRight:'7%'}]}></TextInput>
                 </View>
                 <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', paddingTop:'4%'}}>
@@ -182,6 +201,11 @@ const EditProfile = () => {
                         placeholderTextColor={'#666666'}
                         onChangeText={newText => SetLastName(newText)}
                         defaultValue={LastName}
+                        onPressIn={()=>{
+                            SetCount(1)
+                            SetLastName('')
+                            console.log(count)
+                            console.log(LastName)}}
                         style={[styles.textInput , {width:'70%', marginLeft: '3%', marginRight:'7%'}]}></TextInput>
                 </View>
                 <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', paddingTop:'4%'}}>
@@ -191,6 +215,11 @@ const EditProfile = () => {
                         placeholderTextColor={'#666666'}
                         onChangeText={newText => SetDOB(newText)}
                         defaultValue={DOB}
+                        onPressIn={()=>{
+                            SetCount(1)
+                            SetDOB('')
+                            console.log(count)
+                            console.log(DOB)}}
                         style={[styles.textInput , {width:'70%', marginLeft: '3%', marginRight:'7%'}]}></TextInput>
                 </View>
                 <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', paddingTop:'4%'}}>
@@ -200,6 +229,11 @@ const EditProfile = () => {
                         placeholderTextColor={'#666666'}
                         onChangeText={newText => SetPhoneNumber(newText)}
                         defaultValue={PhoneNumber}
+                        onPressIn={()=>{
+                            SetCount(1)
+                            SetPhoneNumber('')
+                            console.log(count)
+                            console.log(PhoneNumber)}}
                         style={[styles.textInput , {width:'70%', marginLeft: '3%', marginRight:'7%'}]}></TextInput>
                 </View>
                 <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', paddingTop:'4%'}}>
@@ -209,6 +243,11 @@ const EditProfile = () => {
                         placeholderTextColor={'#666666'}
                         onChangeText={newText => SetEmail(newText)}
                         defaultValue={Email}
+                        onPressIn={()=>{
+                            SetCount(1)
+                            SetEmail('')
+                            console.log(count)
+                            console.log(Email)}}
                         style={[styles.textInput , {width:'70%', marginLeft: '3%', marginRight:'7%'}]}></TextInput>
                 </View>
                 <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', paddingTop:'4%'}}>
@@ -218,6 +257,11 @@ const EditProfile = () => {
                         placeholderTextColor={'#666666'}
                         onChangeText={newText => SetCountry(newText)}
                         defaultValue={Country}
+                        onPressIn={()=>{
+                            SetCount(1)
+                            SetCountry('')
+                            console.log(count)
+                            console.log(Country)}}
                         style={[styles.textInput , {width:'70%', marginLeft: '3%', marginRight:'7%'}]}></TextInput>
                 </View>
                 <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', paddingTop:'4%'}}>
@@ -227,6 +271,11 @@ const EditProfile = () => {
                         placeholderTextColor={'#666666'}
                         onChangeText={newText => SetCity(newText)}
                         defaultValue={City}
+                        onPressIn={()=>{
+                            SetCount(1)
+                            SetCity('')
+                            console.log(count)
+                            console.log(City)}}
                         style={[styles.textInput , {width:'70%', marginLeft: '3%', marginRight:'7%'}]}></TextInput>
                 </View>
             </View>

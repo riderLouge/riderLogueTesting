@@ -24,20 +24,37 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import EditProfile from './screens/EditProfile';
 import AddFriends from './screens/AddFriends';
 import Settings from './screens/Settings';
+import { firebase } from '@react-native-firebase/auth';
+import Login from './screens/Login';
+import { NativeBaseProvider } from 'native-base';
+import Registration from './screens/Registration';
 
 
 
 enableLatestRenderer();
 
 const App = () => {
+  
   const Stack = createNativeStackNavigator();
   const Tab = createBottomTabNavigator();
+  const [Initializing,SetInitializing]=React.useState(true);
+  const [User,SetUser]=React.useState('');
 
   useEffect(()=>{
    SplashScreen.hide();
-},[]);
+  },[]);
 
-  const scheme = useColorScheme();
+  function onAuthStateChange(User){
+    SetUser(User);
+    if(Initializing) SetInitializing(false);
+  }
+
+  useEffect(() => {
+    const subscriber = firebase.auth().onAuthStateChanged(onAuthStateChange);
+    return subscriber;
+  }, []);
+
+  if(Initializing) return null;
 
   const BottomTabScreen = () => {
     return (
@@ -120,8 +137,18 @@ const App = () => {
         </Tab.Navigator>
       );
   }
+  if(!User){
+    return(
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}>
+        <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Registration" component={Registration} />
+      </Stack.Navigator>
+    )
+  }
   return(
-    <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack.Navigator
         screenOptions={{
           headerShown: false,
@@ -131,8 +158,16 @@ const App = () => {
         <Stack.Screen name="AddFriends" component={AddFriends} />
         <Stack.Screen name="EditProfile" component={EditProfile} />
       </Stack.Navigator>
-  </NavigationContainer>
   );
 };
 
-export default App;
+export default ()=>{
+  const scheme = useColorScheme();
+  return(
+    <NativeBaseProvider>
+      <NavigationContainer theme={scheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <App/>
+      </NavigationContainer>
+    </NativeBaseProvider>
+  )
+}
