@@ -117,6 +117,7 @@ const App = () => {
                 headerStyle: {
                   backgroundColor: 'grey',
                 },
+                headerShown:false,
                 headerTintColor: '#fff',
                 headerTitleStyle: {
                   fontWeight: 'bold',

@@ -119,10 +119,10 @@ state ={
 };
 
     return(
-        <View style={{flex:1}}>
+        <View style={{flex:1, backgroundColor:'black'}}>
             <ScrollView>
             <View style={{flex:.5, flexDirection:'row', justifyContent:'space-between', marginBottom:'2%'}}>
-                <Text style={{paddingLeft:'2%', fontSize:20, fontStyle:"italic", paddingTop:'2%'}}>Edit Profile</Text>
+                <Text style={{paddingLeft:'2%', fontSize:20, fontStyle:"italic", paddingTop:'2%', color:'white'}}>Edit Profile</Text>
                 <View style={{paddingRight:'2%'}}>
                     <Button  
                         mode='contained' color="#121212" title='save profile'
@@ -167,7 +167,7 @@ state ={
                     </ImageBackground>
                 </View>
                 <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', paddingTop:'4%'}}>
-                    <Icon name="ninja" size={width/12}></Icon>
+                    <Icon name="ninja" size={width/12} color='white'></Icon>
                     <TextInput 
                         placeholder="Profile Name" 
                         placeholderTextColor={'#666666'}
@@ -181,7 +181,7 @@ state ={
                         style={[styles.textInput , {width:'70%', marginLeft: '3%', marginRight:'7%'}]}/>
                 </View>
                 <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', paddingTop:'4%'}}>
-                    <Icon2 name="ios-person-circle-outline" size={width/12}></Icon2>
+                    <Icon2 name="ios-person-circle-outline" color='white' size={width/12}></Icon2>
                     <TextInput 
                         placeholder="First Name" 
                         placeholderTextColor={'#666666'}
@@ -195,7 +195,7 @@ state ={
                         style={[styles.textInput , {width:'70%', marginLeft: '3%', marginRight:'7%'}]}></TextInput>
                 </View>
                 <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', paddingTop:'4%'}}>
-                    <Icon2 name="ios-person-circle-outline" size={width/12}></Icon2>
+                    <Icon2 name="ios-person-circle-outline" color='white' size={width/12}></Icon2>
                     <TextInput 
                         placeholder="Last Name" 
                         placeholderTextColor={'#666666'}
@@ -209,7 +209,7 @@ state ={
                         style={[styles.textInput , {width:'70%', marginLeft: '3%', marginRight:'7%'}]}></TextInput>
                 </View>
                 <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', paddingTop:'4%'}}>
-                    <Icon2 name="ios-calendar" size={width/12}></Icon2>
+                    <Icon2 name="ios-calendar" color='white' size={width/12}></Icon2>
                     <TextInput 
                         placeholder="DOB" 
                         placeholderTextColor={'#666666'}
@@ -223,7 +223,7 @@ state ={
                         style={[styles.textInput , {width:'70%', marginLeft: '3%', marginRight:'7%'}]}></TextInput>
                 </View>
                 <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', paddingTop:'4%'}}>
-                    <Icon name="phone" size={width/12}></Icon>
+                    <Icon name="phone" size={width/12} color='white'></Icon>
                     <TextInput 
                         placeholder="Phone Number" 
                         placeholderTextColor={'#666666'}
@@ -237,7 +237,7 @@ state ={
                         style={[styles.textInput , {width:'70%', marginLeft: '3%', marginRight:'7%'}]}></TextInput>
                 </View>
                 <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', paddingTop:'4%'}}>
-                    <Icon2 name="mail-outline" size={width/12}></Icon2>
+                    <Icon2 name="mail-outline" size={width/12} color='white'></Icon2>
                     <TextInput 
                         placeholder="E-mail" 
                         placeholderTextColor={'#666666'}
@@ -251,7 +251,7 @@ state ={
                         style={[styles.textInput , {width:'70%', marginLeft: '3%', marginRight:'7%'}]}></TextInput>
                 </View>
                 <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', paddingTop:'4%'}}>
-                    <Icon3 name="globe-americas" size={width/12}></Icon3>
+                    <Icon3 name="globe-americas" size={width/12} color='white'></Icon3>
                     <TextInput 
                         placeholder="Country" 
                         placeholderTextColor={'#666666'}
@@ -265,7 +265,7 @@ state ={
                         style={[styles.textInput , {width:'70%', marginLeft: '3%', marginRight:'7%'}]}></TextInput>
                 </View>
                 <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center', paddingTop:'4%'}}>
-                    <Icon2 name="location-sharp" size={width/12}></Icon2>
+                    <Icon2 name="location-sharp" size={width/12} color='white'></Icon2>
                     <TextInput 
                         placeholder="City" 
                         placeholderTextColor={'#666666'}
