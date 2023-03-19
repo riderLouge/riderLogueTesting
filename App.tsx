@@ -58,7 +58,7 @@ const App = () => {
 
   const BottomTabScreen = () => {
     return (
-        <Tab.Navigator initialRouteName="Profile" 
+        <Tab.Navigator initialRouteName="Home" 
         
         screenOptions={({ route }) => ({
           tabBarStyle: { backgroundColor: 'black' },
@@ -71,8 +71,8 @@ const App = () => {
                     iconName = focused ? 'qr-code' : 'qr-code-outline';
                   } else if (route.name === 'Trip') {
                     iconName = focused ? 'ios-map' : 'map-outline';
-                  }else if (route.name === 'Shop') {
-                    iconName = focused ? 'ios-cart' : 'ios-cart-outline';
+                  }else if (route.name === 'Home') {
+                    iconName = focused ? 'home-outline' : 'home-outline';
                   }else if (route.name === 'settings') {
                     iconName = focused? 'md-settings' : 'md-settings-outline';
                   }
@@ -107,13 +107,8 @@ const App = () => {
                   fontWeight: 'bold',
                 },
               }} />
-          <Tab.Screen name="Trip" component={MapStaringScreen}  options={{
-              headerShown:false
-              }}
-              
-          />
-          <Tab.Screen name="Shop" component={ContactScreen}  options={{
-                title: 'Shop',
+          <Tab.Screen name="Home" component={ContactScreen}  options={{
+                title: 'Home',
                 headerStyle: {
                   backgroundColor: 'grey',
                 },
@@ -123,6 +118,10 @@ const App = () => {
                   fontWeight: 'bold',
                 },
               }}/>
+          <Tab.Screen name="Trip" component={MapStaringScreen}  options={{
+                headerShown:false
+          }}
+          />
          <Tab.Screen name="settings"  component={Settings}  options={{
                 title: 'Settings',
                 headerStyle: {

@@ -17,19 +17,16 @@ const Registration = () => {
     const [LastName,SetLastName]=React.useState('');
     const [Email,SetEmail]=React.useState('');
     const [Password,SetPassword]=React.useState('');
-    const [PhoneNumber,SetPhoneNumber]=React.useState('');
-    const [DOB,SetDOB]=React.useState('');
     const Navigation = useNavigation()
 
 
 
-    registerUser = async(Email,Password,FirstName,LastName,PhoneNumber,DOB) => {
+    registerUser = async(Email,Password,FirstName,LastName) => {
         
         console.log(Email)
         console.log(Password)
         console.log(FirstName)
         console.log(LastName)
-        console.log(DOB)
 
         await firebase.auth().createUserWithEmailAndPassword(Email,Password)
         .then(() =>{
@@ -49,9 +46,7 @@ const Registration = () => {
                 .set({
                     FirstName,
                     LastName,
-                    PhoneNumber,
                     Email,
-                    DOB
                 })
             })
             .catch((error) => {

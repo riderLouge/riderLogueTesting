@@ -36,7 +36,10 @@ export default function Settings() {
               <Icon name="ios-power-sharp" size={16} color={'white'} style={{marginLeft:'2%'}}></Icon>
               <Text style={{fontSize: width/23, marginLeft:'2%', color:'white'}} onPress={()=> firebase.auth().signOut()}>Log Out</Text>     
           </View>
-          
+          <View style={{flexDirection:'row', alignItems:'center', paddingTop:'4%'}}>
+              <Icon1 name="shopping" size={16} color={'white'} style={{marginLeft:'2%'}}></Icon1>
+              <Text style={{fontSize: width/23, marginLeft:'2%', color:'white'}}>Shop</Text>     
+          </View>
       </View>   
     </View>
   );
