@@ -18,25 +18,33 @@ const izumi = {
   longitudeDelta: 0.01,
 };
 
-export default function MapScreen() {
+const MapScreen = ({route}) => {
+
+  const place = route.params.place;
+  const lat= route.params.latitude;
+  const lng = route.params.longitude;
+
+  const destination = {
+    latitude: lat,
+    longitude: lng,
+    latitudeDelta: 0.01,
+    longitudeDelta: 0.01,
+  }
+  
+
   return (
      <View style={styles.container}>
-     <MapView style = {styles.mapcontainer}
-          userInterfaceStyle={'dark'}
-          showsUserLocation={true}
-          showsMyLocationButton={true}
-          zoomEnabled = {true}
-          region={izumi} >
-        <Marker
-  coordinate={izumi}
-  pinColor="red"
-/>   
-
-<Marker
-  coordinate={tokyo}
-  pinColor="red"
-/>
-        </MapView>
+        <MapView style = {styles.mapcontainer}
+                  userInterfaceStyle={'dark'}
+                  showsUserLocation={true}
+                  showsMyLocationButton={true}
+                  zoomEnabled = {true}
+                  region={destination}>
+            <Marker
+              coordinate={destination}
+              pinColor="red"
+            />   
+      </MapView>
    </View>
   );
 }
@@ -51,4 +59,22 @@ mapcontainer: {
     width: width,
     height: height,
   },
-});
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+;
+
+
+export default  MapScreen;

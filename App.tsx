@@ -28,6 +28,7 @@ import { firebase } from '@react-native-firebase/auth';
 import Login from './screens/Login';
 import { NativeBaseProvider } from 'native-base';
 import Registration from './screens/Registration';
+import MapScreen from './screens/MapScreen';
 
 
 
@@ -157,6 +158,7 @@ const App = () => {
         <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
         <Stack.Screen name="AddFriends" component={AddFriends} />
         <Stack.Screen name="EditProfile" component={EditProfile} />
+        <Stack.Screen name="MapScreen" component={MapScreen}/>
       </Stack.Navigator>
   );
 };
