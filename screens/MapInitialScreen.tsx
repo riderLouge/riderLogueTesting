@@ -6,43 +6,67 @@ import NewTrip from '../screens/NewTrip';
 import OldTrip from '../screens/OldTrip';
 import {GooglePlacesAutocomplete} from "react-native-google-places-autocomplete";
 import Icon from 'react-native-vector-icons/Ionicons';
+import { useNavigation } from '@react-navigation/native';
+
 
 
 var {width,height} = Dimensions.get('window')
+
+
 export default function MapInitialScreen(){
 
-const Tab = createMaterialTopTabNavigator();
+  const Tab = createMaterialTopTabNavigator();
+  const Navigation = useNavigation()
+  const [location,Setlocation]=React.useState(""); 
+  const [lat,Setlat]=React.useState<any | undefined>(null); 
+  const [lng,Setlng]=React.useState<any | undefined>(null); 
 
   return (
     <View style={{ flex: 1, backgroundColor:'black', flexDirection:'column'}}>
-        <GooglePlacesAutocomplete 
-            placeholder='Enter Location'
-            textInputProps={{
-              placeholderTextColor: 'grey',
-              returnKeyType: "search",
-              color: 'grey'
-            }}
-            debounce={200}
-            fetchDetails={true}
-            styles={{
-              container: {
-                flex:1,
-                paddingTop:'6%',
-                width: width*0.9,
-                alignSelf:'center',
-                position:'absolute',
-                zIndex:2
-              },
-            }}
-            query={{
-              key: 'AIzaSyAnuL_aIiVuU9J7IXjOu49Gx7IsQVxJE98',
-            language: 'en',
-            }}
-            onPress={(data, details = null) => {
-              console.log(data, details);
-            }}
-        />
-        <View style={{marginTop:90, alignItems:'center'}}>
+        <View style={{flexDirection:'row', justifyContent:'space-between', marginLeft:7, marginRight:10}}>
+                <GooglePlacesAutocomplete 
+                    placeholder='Enter Location'
+                    textInputProps={{
+                      placeholderTextColor: 'grey',
+                      returnKeyType: "search",
+                      color: 'grey'
+                    }}
+                    debounce={200}
+                    fetchDetails={true}
+                    styles={{
+                      container: {
+                        flex:1,
+                        paddingTop:19,
+                        width: width*0.83,
+                        alignSelf:'center',
+                        marginLeft:5                        
+                      },
+                    }}
+                    query={{
+                      key: 'AIzaSyAnuL_aIiVuU9J7IXjOu49Gx7IsQVxJE98',
+                    language: 'en',
+                    }}
+                    onPress={(data, details=null) => {
+                      Setlocation(data.structured_formatting.main_text)
+                      Setlat(details?.geometry.location.lat)
+                      Setlng(details?.geometry.location.lng)
+                    }}
+                />
+            <View style={{backgroundColor:'white',
+                          marginTop:18,
+                          borderRadius:10,
+                          width:45,
+                          height:45,
+                          marginLeft:5,
+                          justifyContent:'center',
+                          alignItems:'center'}}>
+                <Icon  name="search" size={30} 
+                        style={{color:'black'}}
+                        onPress={() => Navigation.push('MapScreen', {place: location, latitude: lat, longitude: lng})}
+                ></Icon>
+            </View>
+        </View>
+        <View style={{marginTop:20, alignItems:'center'}}>
             <ScrollView>
             <View style={{height:50, marginBottom:'5%', width: width-50 ,borderWidth:1, backgroundColor:'#1f1e1e', alignItems:'center', justifyContent:'center', borderRadius:5}}>
               <Text style={{color:'white'}}>Completed Rides</Text>

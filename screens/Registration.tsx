@@ -67,12 +67,12 @@ const Registration = () => {
                           borderTopStartRadius:20,
                           borderTopEndRadius:20,
                           marginTop:10}}>
-                 <Text style={{fontWeight: 'normal',
+                <Text style={{fontWeight: 'normal',
                               fontSize:20,
                               color:'white',
                               marginLeft:10,
                               marginTop:25}}>App Name</Text>
-                 <Text style={{fontWeight: 'bold',
+                <Text style={{fontWeight: 'bold',
                               fontSize:23,
                               color:'white',
                               marginLeft:10,
