@@ -3,8 +3,6 @@ import { Button, View, Text, Dimensions, TextInput, StyleSheet } from "react-nat
 import Icon from 'react-native-vector-icons/Ionicons';
 import Icon1 from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
-import { color } from "react-native-elements/dist/helpers";
-import { firebase } from "@react-native-firebase/firestore";
 
 
 
