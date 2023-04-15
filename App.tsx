@@ -22,7 +22,6 @@ import { useColorScheme } from 'react-native';
 import {enableLatestRenderer} from 'react-native-maps';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import EditProfile from './screens/EditProfile';
-import AddFriends from './screens/AddFriends';
 import Settings from './screens/Settings';
 import { firebase } from '@react-native-firebase/auth';
 import Login from './screens/Login';
@@ -156,7 +155,6 @@ const App = () => {
         }}>
         <Stack.Screen name="Bottom" component={BottomTabScreen} />
         <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
-        <Stack.Screen name="AddFriends" component={AddFriends} />
         <Stack.Screen name="EditProfile" component={EditProfile} />
         <Stack.Screen name="MapScreen" component={MapScreen}/>
       </Stack.Navigator>
